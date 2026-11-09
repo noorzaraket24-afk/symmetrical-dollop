@@ -16,20 +16,15 @@ SERIF = "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf"
 CREAM, INK, GOLD = (250, 245, 236), (30, 25, 20), (201, 162, 92)
 
 # ------------------------------------------------------------------ edit list (source seconds, her words)
-EDL = [
-    dict(k="hook",   a=34.89,  b=37.32,  z=(1.55, 1.18)),  # "وعمركن شفتوا سكراب بهالقوام؟"
-    dict(k="ba",     a=0.00,   b=2.40,   z=(1.12, 1.00)),  # "أنا شايفة الفرق من هلّأ"
-    dict(k="prob",   a=2.57,   b=7.97,   z=(1.00, 1.05)),  # "كتير من البنات بتعاني من الخشونة بالجسم، خصوصاً جلد الوزة"
-    dict(k="sol",    a=11.48,  b=20.79,  z=(1.06, 1.10)),  # "إنتي بس ناقصك منتجين بالروتين... منتجات Laurus Aroma"
-    dict(k="coco",   a=25.07,  b=31.73,  z=(1.00, 1.06)),  # "أكتر شي حبيتو بالسكراب تبعهن إنو بحليب جوز الهند، شوفولي ملمسو"
-    dict(k="rough",  a=47.41,  b=51.92,  z=(1.10, 1.17)),  # "ملمس البشرة الخشنة انسوه من بعد ما تستخدمي هالسكراب"
-    dict(k="butter", a=79.98,  b=89.30,  z=(1.00, 1.05)),  # "تاني وأهم خطوة... إنك تستخدمي زبدة تكون منيحة لجسمك"
-    dict(k="hands",  a=113.97, b=122.14, z=(1.06, 1.00)),  # "هاي عملتلها سكراب وحطيتلها زبدة، وإيدي هاي... واضح قديش في فرق"
-    dict(k="cta",    a=131.51, b=141.30, z=(1.00, 1.06)),  # "إنتي بس ناقصك هالمنتجين، ولا تنسي تاخديهن من عند Laurus Aroma..."
-    dict(k="end",    a=139.70, b=141.30, z=(1.06, 1.09), mute=True),  # end card (no voice; her line already finished)
+EDL = [  # every boundary sits in the middle of a real silence (>=140ms) at the end of a sentence
+    dict(k="hook",  a=34.89,  b=37.34,  z=(1.55, 1.18)),  # "وعمركن شفتوا سكراب بهالقوام؟"
+    dict(k="story", a=3.45,   b=31.80,  z=(1.00, 1.04)),  # problem -> 2-step routine -> Laurus Aroma -> coconut milk (one unbroken take)
+    dict(k="proof", a=114.36, b=141.30, z=(1.04, 1.00)),  # hands comparison -> her full CTA to the last word (one unbroken take)
+    dict(k="end",   a=139.04, b=141.30, z=(1.06, 1.08), mute=True),
 ]
-# extra punch-ins at her pauses inside long takes (source time, added zoom)
-PUNCH = {"sol": [(14.35, 0.07)], "butter": [(83.54, 0.08)], "cta": [(135.19, 0.07)]}
+# punch-ins at her natural pauses inside the long takes (source time, zoom)
+PUNCH = {"story": [(11.52, 1.08), (15.45, 1.00), (20.02, 1.10), (24.92, 1.00), (28.0, 1.08)],
+         "proof": [(116.83, 1.00), (119.0, 1.08), (122.14, 1.00), (126.66, 1.10), (131.42, 1.00), (135.19, 1.07)]}
 t = 0.0
 for s in EDL:
     s["nf"] = int(round((s["b"] - s["a"]) * FPS)); s["t0"] = t; t += s["nf"] / FPS
@@ -156,7 +151,7 @@ def light_leak(arr, p, strength=0.28):
 HOOK_L1 = big("عمركن شفتوا", 96)
 HOOK_L2 = big("سكراب بهالقوام؟", 108)
 LBL_BEFORE = big("قبل", 92); LBL_AFTER = big("بعد", 92, GOLD)
-CHIP_ROUGH = pill("خشونة الجسم"); CHIP_KP = pill("جلد الوزة")
+CHIP_ROUGH = pill("خشونة الجسم"); CHIP_KP = pill("جلد الوزة"); CHIP_LASER = pill("بعد الشيفينغ أو الليزر", 50)
 STEP1 = step_card("١", "تقشير"); STEP2 = step_card("٢", "ترطيب"); STEP2_IDLE = step_card("٢", "ترطيب", False)
 ARROW = shadowed(txt("←", "/usr/share/fonts/opentype/inter/InterDisplay-Bold.otf", 80, ar=False))
 BRAND = brand_plate()
@@ -193,45 +188,35 @@ def overlay(seg, fr, lt):
     if k == "hook":
         show(fr, HOOK_L1, lt, L(35.05), 99, W / 2, 1180, "pop")
         show(fr, HOOK_L2, lt, L(35.95), 99, W / 2, 1330, "pop")
-        pass  # (ring removed: texture shot reads on its own)
-    elif k == "ba":
-        draw_vline(fr, 300, 200, 1050, (lt - 0.15) / 0.5)
-        show(fr, LBL_BEFORE, lt, 0.35, 99, 150, 760, "pop")
-        show(fr, LBL_AFTER, lt, 0.60, 99, 455, 760, "pop")
-    elif k == "prob":
-        show(fr, CHIP_ROUGH, lt, L(4.45), d, W / 2, 1180, "pop")
-        show(fr, CHIP_KP, lt, L(6.75), d, W / 2, 1320, "pop")
-    elif k == "sol":
-        show(fr, STEP1, lt, L(15.45), L(19.55), W / 2 + 190, 1220, "pop")
-        show(fr, ARROW, lt, L(16.2), L(19.55), W / 2, 1220)
-        show(fr, STEP2, lt, L(16.4), L(19.55), W / 2 - 190, 1220, "pop")
-        show(fr, BRAND, lt, L(19.9), d, W / 2, 1220)
-    elif k == "coco":
+    elif k == "story":
+        # "كتير من البنات بتعاني من الخشونة بالجسم، خصوصاً جلد الوزة، وأساساً لو بتعمل shaving... قبل أو بعد الليزر"
+        show(fr, CHIP_ROUGH, lt, L(4.45), L(11.3), W / 2, 1150, "pop")
+        show(fr, CHIP_KP, lt, L(6.75), L(11.3), W / 2, 1290, "pop")
+        show(fr, CHIP_LASER, lt, L(9.2), L(11.3), W / 2, 1430, "pop")
+        # "أولاً بدك تقشري، بعدين ترطبي"
+        show(fr, STEP1, lt, L(15.45), L(19.85), W / 2 + 190, 1220, "pop")
+        show(fr, ARROW, lt, L(16.2), L(19.85), W / 2, 1220)
+        show(fr, STEP2, lt, L(16.4), L(19.85), W / 2 - 190, 1220, "pop")
+        # "منتجات Laurus Aroma"
+        show(fr, BRAND, lt, L(20.15), L(24.8), W / 2, 1220)
+        # "...إنو بحليب جوز الهند، شوفولي ملمسو"
         show(fr, COCO, lt, L(29.1), d, W / 2, 1230, "pop")
-    elif k == "rough":
-        if lt >= L(47.85):
-            x = lt - L(47.85); a = clamp(x / 0.2) * clamp((d - lt) / 0.25)
-            lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-            strike(lay, ROUGH, W / 2, 1150, (lt - L(49.45)) / 0.4)
-            if a < 1: lay.putalpha(lay.split()[3].point(lambda v: int(v * a)))
-            fr.alpha_composite(lay)
-        show(fr, FORGET, lt, L(49.6), d, W / 2, 1290, "pop")
-    elif k == "butter":
-        show(fr, STEP2_IDLE, lt, L(80.4), L(88.1), W / 2, 1250, "rise")
-        show(fr, STEP2_BUTTER, lt, L(88.15), d, W / 2, 1250, "pop")
-    elif k == "hands":
+    elif k == "proof":
+        # "طلعوا إيدي، هاي عملتلها سكراب وحطيتلها زبدة، وإيدي هاي... واضح قديش في فرق بيناتهن"
         draw_vline(fr, 300, 260, 1100, (lt - L(116.9)) / 0.5)
-        show(fr, LBL_TREATED, lt, L(115.2), d, 640, 1240, "pop")
-        show(fr, LBL_BARE, lt, L(117.4), d, 170, 1240, "pop")
-    elif k == "cta":
+        show(fr, LBL_TREATED, lt, L(115.2), L(122.1), 640, 1240, "pop")
+        show(fr, LBL_BARE, lt, L(117.4), L(122.1), 170, 1240, "pop")
+        # "إنتي بس ناقصك هالمنتجين"
         show(fr, ROUTINE, lt, L(133.4), L(135.6), W / 2, 1250, "pop")
-        show(fr, BRAND_SUB, lt, L(135.7), d, W / 2, 1250)
+        # "ولا تنسي تاخديهن من عند Laurus Aroma"
+        show(fr, BRAND_SUB, lt, L(135.7), L(139.75), W / 2, 1250)
+        if lt >= L(139.8):
+            x = lt - L(139.8); kk = eo(x / 0.45); cy = 1040 + (1 - kk) * 60
+            place(fr, CARD, W / 2, cy, 0.97 + 0.03 * kk, kk)
+            kb = eo((x - 0.3) / 0.3); place(fr, BTN, W / 2, cy + 185, 0.9 + 0.1 * kb, kb)
     elif k == "end":
-        kk = eo(lt / 0.45); cy = 1040 + (1 - kk) * 60
-        place(fr, CARD, W / 2, cy, 0.97 + 0.03 * kk, kk)
-        if lt > 0.3:
-            kb = eo((lt - 0.3) / 0.3); pulse = 1 + 0.035 * math.sin(max(0, lt - 0.6) * 2 * math.pi * 1.3)
-            place(fr, BTN, W / 2, cy + 185, (0.9 + 0.1 * kb) * pulse, kb)
+        place(fr, CARD, W / 2, 1040)
+        pulse = 1 + 0.035 * math.sin(lt * 2 * math.pi * 1.3); place(fr, BTN, W / 2, 1225, pulse)
 
 # ------------------------------------------------------------------ video
 VF = ("hflip,scale=1080:1920:flags=lanczos,eq=contrast=1.05:saturation=1.06:brightness=0.015:gamma=1.03,"
@@ -255,20 +240,20 @@ def zoom(img, z, ax=0.5, ay=0.48):
 
 enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
                         "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
-                        os.path.join(HERE, "v4_video.mp4")], stdin=subprocess.PIPE)
+                        os.path.join(HERE, "v5_video.mp4")], stdin=subprocess.PIPE)
 for seg in EDL:
     n = seg["nf"]; z0, z1 = seg["z"]
     for i, img in enumerate(frames(seg)):
         lt = i / FPS; p = i / max(1, n - 1)
         z = z0 + (z1 - z0) * (eo(p * 2.2) if seg["k"] == "hook" else eio(p))
-        for ts, dz in PUNCH.get(seg["k"], []):
-            if lt >= ts - seg["a"]: z += dz
+        for ts, zz in PUNCH.get(seg["k"], []):
+            if lt >= ts - seg["a"]: z = zz + 0.01 * math.sin(lt * 0.7)
         ax, ay = 0.5, 0.48
         if seg["k"] == "hook": ax, ay = 0.48, 0.30
         if seg["k"] == "ba": ax, ay = 0.40, 0.40
         img = zoom(img, z, ax, ay)
         if seg["k"] == "end":
-            img = img.filter(ImageFilter.GaussianBlur(min(10, 4 + lt * 14)))
+            img = img.filter(ImageFilter.GaussianBlur(8))
         if seg["k"] == "hook":
             arr = light_leak(np.asarray(img, np.float32), lt / (n / FPS))
             if lt < 0.08: arr = arr + (255 - arr) * 0.35 * (1 - lt / 0.08)
@@ -288,7 +273,7 @@ for seg in EDL:
     raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{seg['a']:.3f}", "-t", f"{seg['b']-seg['a']:.3f}", "-i", SRC,
                           "-vn", "-ac", "2", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
     x = np.frombuffer(raw, np.float32).reshape(-1, 2).copy()[: int(seg["nf"] / FPS * SR)]
-    f = int(0.008 * SR); x[:f] *= np.linspace(0, 1, f)[:, None]; x[-f:] *= np.linspace(1, 0, f)[:, None]
+    f = int(0.015 * SR); x[:f] *= np.linspace(0, 1, f)[:, None]; x[-f:] *= np.linspace(1, 0, f)[:, None]
     s0 = int(seg["t0"] * SR); mix[s0:s0 + len(x)] += x
 rng = np.random.default_rng(5)
 def add(sig, t, g):
@@ -312,15 +297,14 @@ def chime():
 def seg_t(k, src_t):
     s = next(s for s in EDL if s["k"] == k); return s["t0"] + src_t - s["a"]
 add(whoosh(0.6, 200, 4500), 0.0, 0.10)
-add(whoosh(0.35), seg_t("ba", 0) - 0.17, 0.12)
-for k, ts in [("hook", 35.05), ("hook", 35.95), ("ba", 0.35), ("ba", 0.6), ("prob", 4.45), ("prob", 6.75),
-              ("sol", 15.45), ("sol", 16.4), ("coco", 29.1), ("rough", 49.6), ("butter", 88.15),
-              ("hands", 115.2), ("hands", 117.4), ("cta", 133.4)]:
-    add(tick(1300 + 300 * (hash(ts) % 3)), seg_t(k, ts), 0.07)
-add(whoosh(0.4), seg_t("end", 139.70) - 0.2, 0.10)
-add(chime(), seg_t("end", 139.70) + 0.3, 0.06)
-mix = mix[: int(TOTAL * SR)]; mix.tofile(os.path.join(HERE, "v4_mix.f32"))
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "v4_video.mp4"), "-f", "f32le", "-ar", str(SR), "-ac", "2",
-                "-i", os.path.join(HERE, "v4_mix.f32"), "-af", "highpass=f=70,loudnorm=I=-14:TP=-1.0:LRA=9",
+add(whoosh(0.35), seg_t("story", 3.45) - 0.17, 0.10)
+add(whoosh(0.35), seg_t("proof", 114.36) - 0.17, 0.10)
+for k, ts in [("hook", 35.05), ("hook", 35.95), ("story", 4.45), ("story", 6.75), ("story", 9.2), ("story", 15.45),
+              ("story", 16.4), ("story", 29.1), ("proof", 115.2), ("proof", 117.4), ("proof", 133.4)]:
+    add(tick(1300 + 300 * (int(ts * 10) % 3)), seg_t(k, ts), 0.06)
+add(chime(), seg_t("proof", 139.8) + 0.3, 0.05)
+mix = mix[: int(TOTAL * SR)]; mix.tofile(os.path.join(HERE, "v5_mix.f32"))
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "v5_video.mp4"), "-f", "f32le", "-ar", str(SR), "-ac", "2",
+                "-i", os.path.join(HERE, "v5_mix.f32"), "-af", "highpass=f=70,loudnorm=I=-14:TP=-1.0:LRA=9",
                 "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", "-shortest", OUT], check=True)
 print("done", OUT)
