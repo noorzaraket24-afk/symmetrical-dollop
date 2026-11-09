@@ -280,15 +280,16 @@ def zoom(img, z, ax=0.5, ay=0.48):
     cw, ch = W / z, H / z; x0 = clamp((W - cw) * ax, 0, W - cw); y0 = clamp((H - ch) * ay, 0, H - ch)
     return img.resize((W, H), Image.BICUBIC, box=(x0, y0, x0 + cw, y0 + ch))
 
+AUD_SHIFT = 0.08  # original audio lags the lips ~80ms: show picture 80ms earlier than the matching sound
 # build the video piece list: spine pieces split by B-roll intervals
 PIECES = []  # (out_t0, nf, video_src_a, tag, audio_src_a)
 for p in TL:
     cur = p["a"]
     for (aa, ab, va, tag) in sorted(BROLL):
         if p["a"] <= aa < p["b"]:
-            if aa > cur: PIECES.append((cur, aa, cur, "sync"))
+            if aa > cur: PIECES.append((cur, aa, cur - AUD_SHIFT, "sync"))
             PIECES.append((aa, ab, va, tag)); cur = ab
-    if cur < p["b"]: PIECES.append((cur, p["b"], cur, "sync" if p["a"] != 34.89 else "hook"))
+    if cur < p["b"]: PIECES.append((cur, p["b"], cur - AUD_SHIFT, "sync" if p["a"] != 34.89 else "hook"))
 # convert to frame counts on the output timeline
 VP = []; f_acc = 0
 for (aa, ab, va, tag) in PIECES:
@@ -307,7 +308,7 @@ def zoom_for(src_t, tag):
 
 enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
                         "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
-                        os.path.join(HERE, "v7_video.mp4")], stdin=subprocess.PIPE)
+                        os.path.join(HERE, "v10_video.mp4")], stdin=subprocess.PIPE)
 HOOK_LEN = TL[0]["nf"] / FPS
 DISS, PREV = 6, None
 for v in VP:
@@ -405,7 +406,7 @@ add(whoosh(0.7, 200, 3500), 0.0, 0.07)
 for p in TL[1:]: add(whoosh(0.45), p["t0"] - 0.22, 0.06)
 add(chime(), TL[-1]["t0"] + TL[-1]["nf"] / FPS + 0.25, 0.05)
 mix = mix[: int(TOTAL * SR)]; mix.tofile(os.path.join(HERE, "v7_mix.f32"))
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "v7_video.mp4"), "-f", "f32le", "-ar", str(SR), "-ac", "2",
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "v10_video.mp4"), "-f", "f32le", "-ar", str(SR), "-ac", "2",
                 "-i", os.path.join(HERE, "v7_mix.f32"), "-af", "highpass=f=70,loudnorm=I=-14:TP=-1.0:LRA=9",
                 "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", "-shortest", OUT], check=True)
 print("done", OUT)
