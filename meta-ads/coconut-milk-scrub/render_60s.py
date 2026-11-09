@@ -122,7 +122,7 @@ def strike(fr, L, cx, cy, p):
         x0 = cx + (L.width - 96) / 2  # RTL: strike from right to left
         g.line([(x0, cy + 6), (x0 - w, cy + 6)], fill=GOLD + (255,), width=12)
 
-def light_leak(arr, p, strength=0.28):
+def light_leak(arr, p, strength=0.22):
     """warm soft glow drifting across (hook)"""
     if p <= 0 or p >= 1: return arr
     yy, xx = np.mgrid[0:H:8, 0:W:8].astype(np.float32)
@@ -177,8 +177,8 @@ END_HOLD = None  # filled so total == 60.0s
 # ================================================================== VIDEO: B-roll cutaways over the spine (src audio time -> src video time)
 BROLL = [  # (audio_src_a, audio_src_b, video_src_a, tag)
     (11.52, 14.35, 135.40, "jars"),     # "إنتي بس ناقصك منتجين بالروتين" -> both jars
-    (14.35, 15.60, 33.07, "scoop"),     # "أولاً بدك تقشّري" -> fingers in the scrub
-    (15.60, 16.86, 60.90, "rub"),       # "بعدين ترطّبي" -> glossy hand
+    (14.35, 16.10, 33.07, "scoop"),     # "أولاً بدك تقشّري" -> fingers in the scrub
+    (16.10, 17.30, 60.90, "rub"),       # "بعدين ترطّبي" -> glossy hand
     (122.14, 126.55, 47.67, "glow"),    # "عنجد أنا مغرمة بالترطيب..." -> glossy massage close-up
 ]
 # captions: (src_start, src_end, text) - Lebanese Arabic, cleaned from the transcription
@@ -189,13 +189,13 @@ CAPS = [
     (8.05, 9.99, "وأساساً لو بتعمل شيفينغ لجسمها"),
     (9.99, 11.50, "قبل أو بعد جلسة الليزر"),
     (11.52, 14.35, "إنتي بس ناقصك منتجين بالروتين"),
-    (14.35, 15.60, "طبعاً أولاً بدك تقشّري"),
-    (15.60, 16.86, "بعدين ترطّبي"),
+    (14.35, 16.10, "طبعاً أولاً بدك تقشّري"),
+    (16.10, 16.86, "بعدين ترطّبي"),
     (16.86, 18.56, "بس مش بأي منتجات"),
-    (18.56, 20.80, "منتجات Laurus Aroma"),
-    (20.80, 22.30, "تعي قلّك ليش هالمنتجات"),
-    (22.30, 23.60, "رح تناسبك كتير"),
-    (23.60, 24.85, "إذا بتعاني من هالمشاكل"),
+    (18.56, 20.02, "منتجات Laurus Aroma"),
+    (20.02, 22.00, "تعي إحكيلك ليش هالمنتجات"),
+    (22.00, 23.50, "كتير رح تناسبك"),
+    (23.50, 24.85, "لو كنتي بتعاني من هالمشاكل"),
     (25.07, 27.84, "أكتر شي حبّيتو بالسكراب تبعهن"),
     (27.84, 30.77, "إنو بحليب جوز الهند… شوفولي"),
     (30.77, 31.80, "ملمسو!"),
@@ -203,13 +203,13 @@ CAPS = [
     (116.89, 118.68, "وحطّيتلها زبدة، وإيدي هاي…"),
     (119.41, 122.14, "واضح معكن قدّيش في فرق بيناتهن؟"),
     (122.14, 124.40, "عنجد أنا مغرمة بالترطيب"),
-    (124.40, 126.60, "يلي أخدتو من بعد الزبدة"),
+    (124.40, 126.60, "يلي أخدتو من بعد السكراب والزبدة"),
     (126.76, 128.41, "فإذا كنتي بتعاني من الجفاف"),
     (128.41, 131.30, "أو جلد الوزة أو الجلد الزايد عالجسم"),
     (131.51, 133.47, "إنتي بس ناقصك هالمنتجين"),
     (133.47, 136.30, "ولا تنسي تاخديهن من عند Laurus Aroma"),
-    (136.30, 139.73, "لأنو حرفياً رح تلاقي السكن تبعك"),
-    (139.73, 141.30, "انتقلت لـ level تاني"),
+    (136.30, 139.35, "لأنو حرفياً رح تلاقي الـskin تبعك"),
+    (139.35, 141.30, "انتقلت من level لـ level تاني"),
 ]
 # zoom per spine piece at natural pauses (src time, zoom) - gives jump-cut energy without touching audio
 PUNCH = [(3.45, 1.00), (6.65, 1.07), (8.05, 1.00), (16.86, 1.06), (20.80, 1.00), (23.60, 1.08), (25.07, 1.00), (27.84, 1.07),
@@ -250,7 +250,7 @@ HOOK_L2 = big("سكراب بهالقوام؟", 108)
 COCO = pill("حليب جوز الهند", 58, icon=coconut_icon(56))
 STEP1 = step_card("١", "تقشير"); STEP2 = step_card("٢", "ترطيب")
 LBL_TREATED = pill("سكراب + زبدة", 50, bg=GOLD + (245,))
-LBL_BARE = pill("بدون", 50, fg=CREAM, bg=(20, 16, 12, 175))
+LBL_BARE = pill("بدون", 50)
 ROUTINE = pill("سكراب جوز الهند  +  زبدة الجسم", 48)
 
 def spotlight(arr, cx, strength):
@@ -300,17 +300,16 @@ for v in VP: print(f"  {v['f0']/FPS:6.2f}s {v['tag']:6s} video@{v['va']:.2f} ({v
 
 def zoom_for(src_t, tag):
     if tag == "hook": return None
-    if tag in ("scoop", "rub", "glow"): return 1.18
-    if tag == "jars": return 1.04
-    z = 1.0
-    for ts, zz in PUNCH:
-        if src_t >= ts - 1e-6: z = zz
-    return z
+    if tag in ("scoop", "rub", "glow"): return 1.14
+    if tag == "jars": return 1.03
+    if 114.36 <= src_t <= 122.14: return 1.10
+    return 1.03
 
 enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
                         "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
-                        os.path.join(HERE, "v6_video.mp4")], stdin=subprocess.PIPE)
+                        os.path.join(HERE, "v7_video.mp4")], stdin=subprocess.PIPE)
 HOOK_LEN = TL[0]["nf"] / FPS
+DISS, PREV = 6, None
 for v in VP:
     for i, img in enumerate(frames(v["va"], v["nf"])):
         gf = v["f0"] + i; T = gf / FPS; lt = i / FPS
@@ -322,13 +321,12 @@ for v in VP:
         elif tag == "end":
             img = zoom(img, 1.06, 0.5, 0.45).filter(ImageFilter.GaussianBlur(8))
         else:
-            z = zoom_for(src, tag) + (0.03 * eio(lt / (v["nf"] / FPS)) if tag != "sync" else 0.008 * math.sin(T * 0.7))
+            z = zoom_for(src, tag) + (0.04 * eio(lt / (v["nf"] / FPS)) if tag != "sync" else 0.02 * math.sin(2 * math.pi * T / 16))
             ay = 0.40 if (src is not None and 114.36 <= src <= 122.14) else 0.48
             img = zoom(img, z, 0.5, ay)
         arr = None
         if tag == "hook":
             arr = light_leak(np.asarray(img, np.float32), T / HOOK_LEN)
-            if T < 0.08: arr = arr + (255 - arr) * 0.35 * (1 - T / 0.08)
         # ---- hands: spotlight follows what she's talking about
         if src is not None and 114.36 <= src <= 122.14:
             if arr is None: arr = np.asarray(img, np.float32)
@@ -339,6 +337,9 @@ for v in VP:
             else:             cx, s_ = 430, 0.58 * (1 - eo((src - 119.4) / 0.6))
             arr = spotlight(arr, cx, s_)
         if arr is not None: img = Image.fromarray(arr.clip(0, 255).astype(np.uint8))
+        if i < DISS and PREV is not None:
+            img = Image.blend(PREV, img, (i + 1) / (DISS + 1))
+        if i == v["nf"] - 1: PREV = img.copy()
         fr = img.convert("RGBA")
         # ---- graphics (all timed to her words)
         if tag == "hook":
@@ -348,17 +349,17 @@ for v in VP:
         if src is not None:
             ot = lambda s_: out_t(s_)
             # step cards over the B-roll: "أولاً بدك تقشّري / بعدين ترطّبي"
-            show(fr, STEP1, T, ot(14.40), ot(16.86), W / 2 + 190, 1060, "pop")
-            show(fr, STEP2, T, ot(15.62), ot(16.86), W / 2 - 190, 1060, "pop")
+            show(fr, STEP1, T, ot(14.45), ot(17.30), W / 2 + 190, 1060)
+            show(fr, STEP2, T, ot(16.15), ot(17.30), W / 2 - 190, 1060)
             # brand plate as she names it
-            show(fr, BRAND, T, ot(18.70), ot(20.80), W / 2, 1080)
+            show(fr, BRAND, T, ot(19.05), ot(20.70), W / 2, 1080)
             # coconut milk badge
-            show(fr, COCO, T, ot(29.05), ot(31.80), W / 2, 1100, "pop")
+            show(fr, COCO, T, ot(29.05), ot(31.80), W / 2, 1080)
             # hands labels
-            show(fr, LBL_TREATED, T, ot(115.10), ot(122.14), 640, 1080, "pop")
-            show(fr, LBL_BARE, T, ot(118.00), ot(122.14), 230, 1080, "pop")
+            show(fr, LBL_TREATED, T, ot(115.10), ot(122.14), 640, 1080)
+            show(fr, LBL_BARE, T, ot(118.00), ot(122.14), 230, 1080)
             # "هالمنتجين" -> routine pill
-            show(fr, ROUTINE, T, ot(131.60), ot(133.47), W / 2, 1100, "pop")
+            show(fr, ROUTINE, T, ot(131.60), ot(133.47), W / 2, 1080)
             # captions
             for a, b, L in CAP_IMG:
                 if a <= src < b:
@@ -400,13 +401,11 @@ def chime():
     for f, g, dl in [(1318.5, 1, 0), (1975.5, .7, .07), (2637, .5, .14)]:
         m = tt >= dl; x[m] += g * np.sin(2 * np.pi * f * (tt[m] - dl)) * np.exp(-(tt[m] - dl) * 3.5)
     return (x / abs(x).max()).astype(np.float32)
-add(whoosh(0.6, 200, 4500), 0.0, 0.10)
-for p in TL[1:]: add(whoosh(0.35), p["t0"] - 0.17, 0.09)
-for s_ in [35.05, 35.95, 14.40, 15.62, 29.05, 115.10, 118.00, 131.60]:
-    add(tick(1300 + 300 * (int(s_ * 10) % 3)), out_t(s_), 0.05)
+add(whoosh(0.7, 200, 3500), 0.0, 0.07)
+for p in TL[1:]: add(whoosh(0.45), p["t0"] - 0.22, 0.06)
 add(chime(), TL[-1]["t0"] + TL[-1]["nf"] / FPS + 0.25, 0.05)
-mix = mix[: int(TOTAL * SR)]; mix.tofile(os.path.join(HERE, "v6_mix.f32"))
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "v6_video.mp4"), "-f", "f32le", "-ar", str(SR), "-ac", "2",
-                "-i", os.path.join(HERE, "v6_mix.f32"), "-af", "highpass=f=70,loudnorm=I=-14:TP=-1.0:LRA=9",
+mix = mix[: int(TOTAL * SR)]; mix.tofile(os.path.join(HERE, "v7_mix.f32"))
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "v7_video.mp4"), "-f", "f32le", "-ar", str(SR), "-ac", "2",
+                "-i", os.path.join(HERE, "v7_mix.f32"), "-af", "highpass=f=70,loudnorm=I=-14:TP=-1.0:LRA=9",
                 "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", "-shortest", OUT], check=True)
 print("done", OUT)
