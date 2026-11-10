@@ -1,0 +1,503 @@
+<title>مفكرة الحياة الطيّبة</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Readex+Pro:wght@300;400;500;700&display=swap">
+<style>
+/* Layout: one reading column like the A5 notebook page; an olive bar on top, paper below, gold for marks and seeds. */
+:root{
+  --paper:#f6f1e6; --card:#fbf8f1; --tint:#ece5d3; --line:#ddd4c0;
+  --ink:#2e3226; --muted:#6c705d; --olive:#55633f; --gold:#a17d2c; --gold-soft:var(--onbar-gold);
+  --bar:#3c462f; --onbar:#f1ead8; --onbar-muted:#c8c3a9; --onbar-gold:#d4b679;
+  --seed-empty:#fbf8f1;
+  --f-ui:"Readex Pro","Noto Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  --f-quran:"Amiri Quran","Amiri","Traditional Arabic","Times New Roman",serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#1c2117; --card:#252c1f; --tint:#2c3424; --line:#3a4430;
+  --ink:#ebe5d4; --muted:#a6a893; --olive:#aebf8e; --gold:#d6b061; --gold-soft:#6e5c33;
+  --bar:#131710; --onbar:#efe8d5; --onbar-muted:#a9a78f; --onbar-gold:#d4b679; --seed-empty:#252c1f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#1c2117; --card:#252c1f; --tint:#2c3424; --line:#3a4430;
+  --ink:#ebe5d4; --muted:#a6a893; --olive:#aebf8e; --gold:#d6b061; --gold-soft:#6e5c33;
+  --bar:#131710; --onbar:#efe8d5; --onbar-muted:#a9a78f; --onbar-gold:#d4b679; --seed-empty:#252c1f; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{background:var(--paper)}
+body{margin:0;color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.75;direction:rtl;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+a{color:inherit}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);color:var(--onbar);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:2px solid var(--gold)}
+.bar-in{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px;padding-block:10px}
+.brand{font-weight:700;font-size:17px;text-decoration:none;white-space:nowrap}
+.brand{min-width:0}
+@media (max-width:420px){.brand small{display:none!important}.nav a{padding:5px 7px}}
+.brand small{display:block;font-weight:400;font-size:11px;color:var(--onbar-muted);line-height:1.2}
+.nav{display:flex;gap:2px;margin-inline-start:auto;flex-wrap:nowrap;justify-content:flex-end}
+.nav a{text-decoration:none;font-size:13px;padding:5px 9px;white-space:nowrap;border-radius:999px;color:var(--onbar-muted)}
+.nav a[aria-current="true"]{background:var(--gold);color:var(--bar);font-weight:500}
+
+main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 64px}
+.page{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+
+/* type */
+.eyebrow{font-size:12px;color:var(--gold);font-weight:500;letter-spacing:.02em}
+h1{font-size:30px;line-height:1.3;margin:0;color:var(--olive);font-weight:700;text-wrap:balance}
+h2{font-size:18px;margin:0;color:var(--olive);font-weight:700;text-wrap:balance}
+h3{font-size:15px;margin:0;font-weight:500}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.head{display:flex;flex-direction:column;gap:6px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.num{font-variant-numeric:tabular-nums}
+
+.ayah{background:var(--tint);border-radius:var(--r);padding:18px 18px 12px;text-align:center}
+.ayah .q{font-family:var(--f-quran);font-size:22px;line-height:2.1;color:var(--ink)}
+.ayah .ref{font-size:12px;color:var(--muted);margin-top:4px}
+.q-inline{font-family:var(--f-quran);font-size:19px;line-height:1.9}
+.quote{border-inline-start:3px solid var(--gold);padding-inline-start:14px;display:flex;flex-direction:column;gap:4px}
+.quote p{font-size:16.5px;line-height:1.85}
+.quote cite{font-style:normal;font-size:12px;color:var(--muted)}
+.quote cite::before{content:"— "}
+.box{background:var(--tint);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.box h3{color:var(--olive);font-weight:700}
+
+.list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:11px 2px;border-bottom:1px dashed var(--line);text-decoration:none}
+.li .k{color:var(--muted);font-size:12.5px;min-width:76px}
+.li .v{min-width:0}
+.li .go{color:var(--gold);font-size:13px}
+a.li:hover .v{color:var(--olive)}
+
+/* fields */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.field .lab{font-weight:500;font-size:14.5px;color:var(--olive)}
+textarea,input[type=text],input[type=number]{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0 2px;
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--line) 31px,var(--line) 32px);background-attachment:local;line-height:32px;resize:none;min-height:64px}
+input[type=text],input[type=number]{min-height:0;background-image:none;line-height:1.6;padding:4px 2px}
+textarea:focus,input:focus{outline:none;border-bottom-color:var(--gold)}
+textarea::placeholder,input::placeholder{color:var(--muted);opacity:.6}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two>*{min-width:0}
+@media (max-width:520px){.two{grid-template-columns:1fr}}
+
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--olive);background:transparent;color:var(--olive);padding:8px 16px;border-radius:999px;cursor:pointer;text-decoration:none;font-size:14px}
+.btn.solid{background:var(--olive);color:var(--paper)}
+.btn:hover{border-color:var(--gold)}
+
+/* home */
+.hero{background:var(--bar);color:var(--onbar);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:1fr auto;align-items:end}
+.hero-txt{padding:22px 20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.hero h1{color:var(--onbar);font-size:34px}
+.hero .eyebrow,.hero .q-inline{color:var(--onbar-gold)}
+.hero svg{display:block;width:120px;height:auto;max-width:100%}
+.today{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.today .big{font-size:44px;line-height:1;color:var(--olive);font-weight:700}
+.stations{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:560px){.stations{grid-template-columns:1fr}}
+.st{border:1px solid var(--line);border-radius:12px;padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:6px;background:var(--card)}
+.st .q-inline{font-size:17px;color:var(--gold)}
+.st.now{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.meter{height:6px;background:var(--tint);border-radius:9px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--gold)}
+
+/* station cover */
+.cover{background:var(--bar);color:var(--onbar);border-radius:14px;padding:26px 20px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.cover .eyebrow{color:var(--onbar-gold)}
+.cover .w{font-family:var(--f-quran);font-size:40px;line-height:1.8;color:var(--onbar-gold)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.tile{border:1px solid var(--line);border-radius:10px;padding:12px;text-decoration:none;background:var(--card);display:flex;flex-direction:column;gap:2px}
+.tile b{color:var(--olive);font-weight:500}
+.tile span{font-size:12px;color:var(--muted)}
+.mrow{display:grid;grid-template-columns:84px 1fr;gap:4px 12px;padding:10px 0;border-bottom:1px dashed var(--line);text-decoration:none;align-items:baseline}
+.mrow .mn{font-weight:700;color:var(--olive)}
+.mrow .th{grid-column:2;font-size:12px;color:var(--muted)}
+.mrow .q-inline{font-size:18px;min-width:0}
+
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal .wd{font-size:11px;color:var(--gold)}
+.cal a{display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 0 3px;border-radius:8px;background:var(--card);text-decoration:none;font-size:13px;border:1px solid transparent}
+.cal a.is-today{border-color:var(--gold)}
+.cal svg{width:14px;height:18px}
+
+/* day */
+.dayhead{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:12px}
+.dayhead .n{font-size:58px;line-height:1;color:var(--olive);font-weight:700}
+.dayhead .seed{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted)}
+.dayhead .seed svg{width:30px;height:40px}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.meta a{color:var(--olive)}
+.times{display:flex;flex-direction:column;gap:0;position:relative}
+.time{display:grid;grid-template-columns:64px 1fr;gap:14px;padding-block:6px 18px;position:relative}
+.time::before{content:"";position:absolute;inset-block:0;right:31px;width:1px;background:var(--line)}
+.time:last-child::before{bottom:auto;height:30px}
+.tlabel{display:flex;flex-direction:column;align-items:center;gap:0;position:relative;z-index:1;text-align:center}
+.tlabel .ico{width:28px;height:28px;border-radius:50%;border:1px solid var(--olive);display:grid;place-items:center;background:var(--paper);color:var(--olive)}
+.tlabel .ico svg{width:16px;height:16px}
+.tlabel b{font-size:13px;color:var(--olive);margin-top:4px}
+.tlabel .q-inline{font-size:13px;color:var(--gold);line-height:1.6}
+.tbody{min-width:0;display:flex;flex-direction:column;gap:6px}
+.check{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:500;font-size:15.5px;line-height:1.7}
+.check input{appearance:none;-webkit-appearance:none;flex:none;width:20px;height:20px;border:1.5px solid var(--olive);border-radius:5px;margin-top:4px;display:grid;place-items:center;cursor:pointer;background:var(--card)}
+.check input:checked{background:var(--olive)}
+.check input:checked::after{content:"";width:6px;height:11px;border:solid var(--paper);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.check input:checked + span{color:var(--muted)}
+.best label{color:var(--gold)}
+
+.worship{border-top:2px solid var(--olive);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.w{background:var(--tint);border-radius:8px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;font-size:13px}
+.w .dots{display:flex;gap:4px}
+.dot{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:1.5px solid var(--olive);border-radius:50%;margin:0;cursor:pointer;background:var(--card)}
+.dot:checked{background:var(--olive)}
+.w input[type=number]{width:56px;padding:0 4px;border-bottom:1px solid var(--olive);text-align:center;font-size:13px}
+.w .pg{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* map */
+.mapmonth{display:flex;flex-direction:column;gap:8px}
+.mm-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.mm-h b{color:var(--olive)}
+.seeds{display:flex;flex-wrap:wrap;gap:3px 2px;align-items:center}
+.seeds a{display:flex;flex-direction:column;align-items:center;text-decoration:none;font-size:10px;color:var(--muted);width:30px}
+.seeds svg{width:18px;height:24px}
+.seeds .wk{width:2px;height:30px;background:var(--gold);margin-inline:5px;border-radius:2px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend svg{width:14px;height:19px}
+
+.wkseeds{display:flex;gap:6px;flex-wrap:wrap}
+.wkseeds a{display:flex;flex-direction:column;align-items:center;font-size:10px;color:var(--muted);text-decoration:none}
+.wkseeds svg{width:18px;height:24px}
+
+.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--gold);display:inline-block}
+.confirm{border:1px solid var(--gold);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--card)}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--bar);color:var(--onbar);padding:8px 16px;border-radius:999px;font-size:13px;z-index:20}
+@media (prefers-reduced-motion:no-preference){.page{animation:in .25s ease-out}@keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}}
+</style>
+
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="#home">الحياة الطيّبة<small>مفكرة يومية · ٢٠٢٧</small></a>
+  <nav class="nav" id="nav">
+    <a href="#today" data-n="today">اليوم</a>
+    <a href="#map" data-n="map">الخريطة</a>
+    <a href="#s1" data-n="s">المحطات</a>
+    <a href="#backup" data-n="backup">حفظ</a>
+  </nav>
+</div></header>
+<main><div class="page" id="view"></div></main>
+<div class="toast" id="toast" hidden></div>
+
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+(function(){
+"use strict";
+const DATA=JSON.parse(document.getElementById('data').textContent);
+const ST=DATA.stations;
+const AR='٠١٢٣٤٥٦٧٨٩';
+const ar=n=>String(n).replace(/\d/g,d=>AR[d]);
+const p2=n=>String(n).padStart(2,'0');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MONTHS=['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تمّوز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'];
+const WD=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+const YEAR=2027;
+
+/* ---------- index ---------- */
+const DAYS=[]; const DAYMAP={};
+ST.forEach(S=>{S.days.forEach(d=>{d.st=S.id;d.key='d'+p2(d.m)+p2(d.d);d.i=DAYS.length;DAYS.push(d);DAYMAP[d.key]=d;});
+  S.months.forEach((M,mi)=>{M.st=S.id;M.mi=mi;M.key='m'+M.n;M.weeks.forEach(W=>{W.m=M.n;W.key='w'+M.n+'-'+W.i;});});});
+const MONTH=n=>{for(const S of ST)for(const M of S.months)if(M.n===n)return M;};
+const weekOf=d=>MONTH(d.m).weeks.find(W=>d.d>=W.from&&d.d<=W.to);
+const stOfMonth=n=>ST[Math.floor((n-1)/4)];
+
+/* ---------- storage: this device always, plus the viewer's private store when available ---------- */
+const LS='hayat-tayyiba-2027';
+const Store={
+  cache:{}, remote:null, timers:{}, queue:[], busy:false, mode:'local',
+  load(){try{this.cache=JSON.parse(localStorage.getItem(LS)||'{}')||{};}catch(e){this.cache={};}},
+  saveLocal(){try{localStorage.setItem(LS,JSON.stringify(this.cache));}catch(e){}},
+  get(k){return this.cache[k]||{};},
+  set(k,f,v){const e=Object.assign({},this.get(k));e[f]=v;e._t=Date.now();this.cache[k]=e;this.saveLocal();this.push(k);},
+  push(k){if(!this.remote)return;clearTimeout(this.timers[k]);this.timers[k]=setTimeout(()=>{if(!this.queue.includes(k))this.queue.push(k);this.drain();},900);},
+  async drain(){if(this.busy||!this.remote)return;this.busy=true;
+    while(this.queue.length){const k=this.queue.shift();try{await this.remote.doc(k).set(this.cache[k]);}catch(e){setStatus();}}
+    this.busy=false;setStatus();},
+  async connect(){
+    const c=window.claude; if(!c||typeof c.use!=='function')return;
+    try{
+      const [db,user]=await Promise.all([c.use('db'),c.use('user')]);
+      if(!db||!user)return; const id=await user.id(); if(!id)return;
+      const col=db.collection('data/users/'+id+'/e');
+      const snap=await col.limit(1000).get();
+      let changed=false; const seen=new Set();
+      snap.docs.forEach(doc=>{const r=doc.data()||{};seen.add(doc.id);const l=this.cache[doc.id];
+        if(!l||(r._t||0)>(l._t||0)){this.cache[doc.id]=r;changed=true;}});
+      this.remote=col; this.mode='account';
+      Object.keys(this.cache).forEach(k=>{const r=snap.docs.find(d=>d.id===k);if(!seen.has(k)||((this.cache[k]._t||0)>((r&&r.data()||{})._t||0)))this.queue.push(k);});
+      if(changed){this.saveLocal();render();}
+      setStatus(); this.drain();
+    }catch(e){/* stays on this device */}
+  }
+};
+function setStatus(){const el=document.getElementById('status');if(!el)return;
+  el.innerHTML=Store.mode==='account'?'<i></i>تُحفظ كتابتك في حسابك وعلى هذا الجهاز':'<i></i>تُحفظ كتابتك على هذا الجهاز';}
+
+/* ---------- seeds ---------- */
+function dayState(key){const e=Store.get(key);const n=[0,1,2].filter(i=>e['c'+i]).length;return n===0?0:n===3?2:1;}
+function seed(st,state){
+  const id='g'+Math.random().toString(36).slice(2,8);
+  const fill=state===2?'var(--olive)':'var(--seed-empty)';
+  const half=state===1?`<clipPath id="${id}"><rect x="12" y="0" width="12" height="32"/></clipPath>`:'';
+  const halfFill=(shape)=>state===1?shape.replace('FILL','var(--olive)').replace('/>',` clip-path="url(#${id})"/>`):'';
+  let shape,line='';
+  if(st===3){shape='<circle cx="12" cy="17" r="10" fill="FILL" stroke="var(--olive)" stroke-width="1.6"/>';
+    line='<path d="M12 7 C12 4 14 2.5 16 2" fill="none" stroke="var(--olive)" stroke-width="1.4"/>';}
+  else if(st===2){shape='<path d="M12 30 C3 22 3 10 12 3 C21 10 21 22 12 30Z" fill="FILL" stroke="var(--olive)" stroke-width="1.6"/>';
+    line=`<path d="M12 31 L12 6" stroke="${state===2?'var(--paper)':'var(--olive)'}" stroke-width="1"/>`;}
+  else{shape='<path d="M12 2 C20 8 21 22 12 30 C3 22 4 8 12 2Z" fill="FILL" stroke="var(--olive)" stroke-width="1.6"/>';
+    line=`<path d="M12 6 L12 27" stroke="${state===2?'var(--paper)':'var(--olive)'}" stroke-width="1" stroke-dasharray="1.6 2.2"/>`;}
+  return `<svg viewBox="0 0 24 32" aria-hidden="true"><defs>${half}</defs>${shape.replace('FILL',fill)}${halfFill(shape)}${line}</svg>`;
+}
+const SEEDWORD=['لم يكتمل اليوم','عشتُ بعضه','عشتُ أوقاته الثلاثة'];
+
+/* ---------- helpers ---------- */
+const ayah=(a)=>`<div class="ayah"><div class="q">﴿${esc(a[0])}﴾</div><div class="ref">${esc(a[1])}</div></div>`;
+const quote=(q)=>`<figure class="quote" style="margin:0"><p>${esc(q[0])}</p><cite>${esc(q[1])}</cite></figure>`;
+function fld(key,f,label,opts={}){
+  const v=Store.get(key)[f]||''; const id=`f-${key}-${f}`;
+  if(opts.input) return `<div class="field"><label for="${id}">${esc(label)}</label><input type="text" id="${id}" data-k="${key}" data-f="${f}" value="${esc(v)}"></div>`;
+  return `<div class="field ${opts.cls||''}"><label for="${id}">${esc(label)}</label><textarea id="${id}" data-k="${key}" data-f="${f}" rows="${opts.rows||2}" placeholder="${esc(opts.ph||'')}">${esc(v)}</textarea></div>`;
+}
+function todayKey(){const t=new Date();if(t.getFullYear()!==YEAR)return null;return 'd'+p2(t.getMonth()+1)+p2(t.getDate());}
+function dateOf(d){return new Date(YEAR,d.m-1,d.d);}
+function stFilled(S){return S.days.filter(d=>dayState(d.key)===2).length;}
+function monthFilled(M){return DAYS.filter(d=>d.m===M.n&&dayState(d.key)===2).length;}
+function monthDays(M){return DAYS.filter(d=>d.m===M.n);}
+
+/* ---------- views ---------- */
+function vHome(){
+  const tk=todayKey(); const t=new Date();
+  let today;
+  if(tk&&DAYMAP[tk]){const d=DAYMAP[tk];const S=ST[d.st-1];
+    today=`<section class="today"><div class="row" style="justify-content:space-between"><div><div class="eyebrow">اليوم · ${esc(d.wd)}</div><div class="big num">${ar(d.d)} <span style="font-size:20px">${MONTHS[d.m-1]}</span></div></div><div style="width:34px">${seed(S.id,dayState(d.key))}</div></div>
+      <div class="list">${d.q.map((q,i)=>`<a class="li" href="#${d.key}"><span class="k">${['الصبح','النهار','المسا'][i]}</span><span class="v">${esc(q)}</span><span class="go">${Store.get(d.key)['c'+i]?'✓':''}</span></a>`).join('')}</div>
+      <div><a class="btn solid" href="#${d.key}">افتح صفحة اليوم</a></div></section>`;}
+  else if(t<new Date(YEAR,0,1)){const days=Math.ceil((new Date(YEAR,0,1)-t)/864e5);
+    today=`<section class="today"><div class="eyebrow">قبل أن أبدأ</div><h2>تبدأ المحطة الأولى في ١ كانون الثاني ٢٠٢٧</h2><p class="muted">بقي ${ar(days)} يوماً. اكتب «عهد المحطة» الآن، وتصفّح الأيام الأولى لتعرف ما ينتظرك.</p>
+      <div class="row"><a class="btn solid" href="#c1">اكتب عهد المحطة</a><a class="btn" href="#d0101">اليوم الأول</a></div></section>`;}
+  else today=`<section class="today"><h2>انتهت سنة المفكرة</h2><p class="muted">ارجع إلى «حصاد السنة» واقرأ ما كتبته.</p><div><a class="btn solid" href="#h3">حصاد السنة</a></div></section>`;
+  const nowSt=tk&&DAYMAP[tk]?DAYMAP[tk].st:0;
+  return `<section class="hero"><div class="hero-txt"><span class="eyebrow">مفكرة يومية · ٢٠٢٧</span><h1>الحياة الطيّبة</h1>
+      <span class="q-inline">﴿فَلَنُحْيِيَنَّهُ حَيَاةً طَيِّبَةً﴾</span></div>${treeArt()}</section>
+    ${today}
+    <section class="stack"><div class="head"><span class="eyebrow">ثلاث محطات</span><h2>جذرٌ، ثم أغصان، ثم ثمر</h2></div>
+    <div class="stations">${ST.map(S=>{const f=stFilled(S);return `<a class="st ${S.id===nowSt?'now':''}" href="#s${S.id}"><span class="eyebrow">المحطة ${S.ord}</span><b style="color:var(--olive)">${esc(S.name)}</b><span class="q-inline">${esc(S.word)}</span><span class="small muted">${esc(S.span)}</span><div class="meter"><i style="width:${(f/S.days.length*100).toFixed(1)}%"></i></div><span class="small muted num">${ar(f)} ${S.unit} من ${ar(S.days.length)}</span></a>`;}).join('')}</div></section>
+    <section class="stack">${ayah(DATA.intro.ayah)}${quote(DATA.intro.quote)}<p class="muted">${esc(DATA.intro.map)}</p>
+      <div class="row"><a class="btn" href="#about">كيف أعيش هذه المفكرة</a></div></section>
+    <p class="status" id="status"></p>`;
+}
+function treeArt(){return `<svg viewBox="0 0 120 150" aria-hidden="true"><g fill="none" stroke="var(--onbar-gold)" stroke-linecap="round">
+  <path d="M60 150 V92" stroke-width="10"/><path d="M60 100 C48 88 40 76 34 60 M60 96 C72 84 82 72 88 56 M60 92 C58 76 60 62 62 46" stroke-width="4"/>
+  <path d="M34 60 C30 50 26 44 20 40 M34 60 C38 50 40 42 44 34 M88 56 C92 46 98 40 104 36 M88 56 C84 46 80 40 76 30 M62 46 C56 36 54 28 54 18 M62 46 C68 36 72 30 74 20" stroke-width="2"/></g>
+  <g fill="var(--onbar-gold)">${[[20,40],[44,34],[104,36],[76,30],[54,18],[74,20],[28,30],[94,26],[64,10],[40,22],[86,14]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4.5"/>`).join('')}</g></svg>`;}
+
+function vAbout(){const S=ST[0];
+  return `<div class="head"><span class="eyebrow">كيف أعيش هذه المفكرة</span><h1>كلّ يوم آيةٌ صغيرة</h1></div>
+  <p>كلّ صفحة يومية مقسومة على أوقات النهار الثلاثة، وكلّ وقت يعيش كلمة من الآية. ولكلّ يوم من أيّام السنة أسئلته الخاصة، لا يتكرّر منها شيء.</p>
+  <div class="list">${[['الصبح','وَهُوَ مُؤْمِنٌ','نيّة اليوم وعمل الصبح'],['النهار','عَمِلَ صَالِحًا','عملٌ واحد ينفّذ الإيمان'],['المسا','حَيَاةً طَيِّبَةً','سؤال محاسبة وأطيب ما في اليوم']].map(r=>`<div class="li"><span class="k"><b>${r[0]}</b></span><span class="v"><span class="q-inline" style="color:var(--gold)">${r[1]}</span><br><span class="small muted">${r[2]}</span></span><span></span></div>`).join('')}</div>
+  <section class="stack"><h2>بذرة اليوم</h2><p>في زاوية كلّ يوم بذرة (ورقة في المحطة الثانية، وثمرة في الثالثة). حين تضع علامة على أوقات اليوم الثلاثة تمتلئ وحدها، وتظهر في خريطة المحطة. بعد آخر يوم تكتمل الشجرة على الشاشة كما تكتمل في القلب.</p>
+  <div class="legend">${[0,1,2].map(s=>`<span>${seed(1,s)}${['فارغة','نصفها','ممتلئة'][s]} · ${SEEDWORD[s]}</span>`).join('')}</div></section>
+  <section class="stack"><h2>ترتيب المفكرة</h2><div class="list">
+   ${[['الافتتاحية','آية المحطة، وكلمتها، وخطابها الكبير.'],['صفحة الشهر','آيته، واقتباس، و«من سيرته» أو «من وصاياه»، وتقويمه.'],['صفحة الأسبوع','محوره، وكلمته، وما يبدأ به صباح كلّ يوم من أيّامه.'],['صفحة اليوم','الأوقات الثلاثة، ومتابعة العبادات في الأسفل.'],['ميزان الشهر والحصاد','وقفة في آخر كلّ شهر، وأخرى في آخر كلّ محطة.']].map(r=>`<div class="li"><span class="k">${r[0]}</span><span class="v">${r[1]}</span><span></span></div>`).join('')}</div></section>
+  ${ayah(DATA.intro.tree)}`;}
+
+function vStation(S){const f=stFilled(S);
+  return `<section class="cover"><span class="eyebrow">المحطة ${S.ord} · ${esc(S.name)}</span><div class="w">${esc(S.word)}</div><span class="small" style="color:var(--onbar-muted)">${esc(S.range)} · ${ar(S.days.length)} يوماً</span></section>
+  <div class="row" style="justify-content:center;gap:6px">${ST.map(x=>`<a class="btn ${x.id===S.id?'solid':''}" href="#s${x.id}">${esc(x.name)}</a>`).join('')}</div>
+  ${ayah(S.ayah)}
+  <section class="stack"><p>${esc(S.monthsLead)}</p><div>${S.months.map(M=>`<a class="mrow" href="#${M.key}"><span class="mn">${M.name}</span><span class="q-inline">${esc(M.ayah[0])}</span><span class="th">${esc(M.theme)} · <span class="num">${ar(monthFilled(M))} من ${ar(monthDays(M).length)}</span></span></a>`).join('')}</div></section>
+  ${quote(S.quote)}
+  <section class="tiles">
+    <a class="tile" href="#c${S.id}"><b>عهد المحطة</b><span>قبل أن أبدأ</span></a>
+    <a class="tile" href="#k${S.id}"><b>${esc(S.speech.title)}</b><span>الخطاب الكبير لهذه المحطة</span></a>
+    <a class="tile" href="#map${S.id}"><b>${esc(S.mapName)}</b><span class="num">${ar(f)} ${S.unit} من ${ar(S.days.length)}</span></a>
+    <a class="tile" href="#h${S.id}"><b>${esc(S.harvestName)}</b><span>آخر المحطة</span></a>
+  </section>`;}
+
+function vCovenant(S){const k='c'+S.id;
+  return `<div class="head"><span class="eyebrow">قبل أن أبدأ · المحطة ${S.ord}</span><h1>عهد المحطة</h1></div>
+  ${fld(k,'name','أنا',{input:true})}
+  <p style="font-size:16px">${esc(S.covenant.intro)}</p>
+  ${S.covenant.prompts.map((p,i)=>fld(k,'a'+i,p,{rows:i===3?5:3})).join('')}
+  <div class="two">${fld(k,'date','التاريخ',{input:true})}${fld(k,'sign','التوقيع',{input:true})}</div>
+  <div><a class="btn" href="#s${S.id}">العودة إلى المحطة</a></div>`;}
+
+function vSpeech(S){const sp=S.speech,k='k'+S.id;
+  return `<div class="head"><span class="eyebrow">الخطاب الكبير لهذه المحطة</span><h1>${esc(sp.title)}</h1><span class="small muted">${esc(sp.meta)}</span></div>
+  ${sp.paras.map(p=>`<p>${esc(p)}</p>`).join('')}
+  <section class="stack"><h2>كيف أرافقه خلال المحطة</h2><ul style="margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px">${sp.how.map(h=>`<li>${esc(h)}</li>`).join('')}</ul></section>
+  <div class="box"><p class="small"><b>أين أجده:</b> ${esc(sp.where)}</p></div>
+  ${fld(k,'notes','عبارات أعيش بها',{rows:8})}
+  <div><a class="btn" href="#s${S.id}">العودة إلى المحطة</a></div>`;}
+
+function calendar(M){const first=(new Date(YEAR,M.n-1,1).getDay()+1)%7;const days=monthDays(M);const tk=todayKey();
+  let cells=WD.map(w=>`<span class="wd">${w}</span>`).join('')+'<span></span>'.repeat(first);
+  cells+=days.map(d=>`<a href="#${d.key}" class="${d.key===tk?'is-today':''}" aria-label="${d.d} ${MONTHS[d.m-1]}"><span class="num">${ar(d.d)}</span>${seed(d.st,dayState(d.key))}</a>`).join('');
+  return `<div class="cal">${cells}</div>`;}
+
+function vMonth(M){const S=ST[M.st-1];const k=M.key;const prev=MONTH(M.n-1),next=MONTH(M.n+1);
+  return `<div class="head"><div class="row" style="justify-content:space-between"><span class="eyebrow">المحطة ${S.ord} · الشهر ${ar(M.mi+1)} من ٤</span><span class="small muted">${ar(monthDays(M).length)} يوماً</span></div><h1>${M.name}</h1><span class="eyebrow" style="font-size:14px">${esc(M.theme)}</span></div>
+  ${ayah(M.ayah)}
+  <p>${esc(M.intro)}</p>
+  ${quote(M.quote)}
+  <div class="box"><h3>${esc(M.boxTitle)}</h3><p>${esc(M.box)}</p>${M.boxSrc?`<p class="small muted">${esc(M.boxSrc)}</p>`:''}</div>
+  ${calendar(M)}
+  <section class="stack"><h2>أسابيع الشهر</h2><div class="list">${M.weeks.map(W=>`<a class="li" href="#${W.key}"><span class="k num">${ar(W.from)}–${ar(W.to)} ${M.name}</span><span class="v">${esc(W.title)}</span><span class="go">←</span></a>`).join('')}
+    <a class="li" href="#r${M.n}"><span class="k">آخر الشهر</span><span class="v">ميزان الشهر</span><span class="go">←</span></a></div></section>
+  ${fld(k,'intent','نيّتي لهذا الشهر',{rows:3})}
+  <nav class="pager">${prev?`<a class="btn" href="#${prev.key}">→ ${prev.name}</a>`:'<span></span>'}${next?`<a class="btn" href="#${next.key}">${next.name} ←</a>`:''}</nav>`;}
+
+function vWeek(W){const M=MONTH(W.m),S=ST[M.st-1],k=W.key;const days=DAYS.filter(d=>d.m===W.m&&d.d>=W.from&&d.d<=W.to);
+  return `<div class="head"><span class="eyebrow">الأسبوع ${ar(W.i)} · ${ar(W.from)}–${ar(W.to)} ${M.name}</span><h1>${esc(W.title)}</h1></div>
+  ${W.ayah?ayah(W.ayah):quote(W.quote)}
+  <section class="stack"><div><h2>أيّام الأسبوع</h2><p class="small muted">لكلّ يوم أسئلته الخاصة. هذا ما يبدأ به صباح كلّ يوم:</p></div>
+  <div class="list">${days.map(d=>`<a class="li" href="#${d.key}"><span class="k"><b class="num" style="color:var(--olive);font-size:15px">${ar(d.d)}</b> ${esc(d.wd)}</span><span class="v">${esc(d.q[0])}</span><span style="width:18px">${seed(S.id,dayState(d.key))}</span></a>`).join('')}</div></section>
+  ${fld(k,'intent','نيّتي لهذا الأسبوع',{rows:3})}
+  <section class="stack"><h2>في آخر الأسبوع</h2>
+   <div class="two">${fld(k,'kept','ما ثبتُّ عليه',{rows:3})}${fld(k,'missed','ما قصّرتُ فيه',{rows:3})}</div>
+   ${fld(k,'carry','ما أحمله معي',{rows:2})}</section>
+  <div class="row"><a class="btn" href="#${M.key}">${M.name}</a></div>`;}
+
+const TIMES=[['الصبح','وَهُوَ مُؤْمِنٌ','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 17h16M7 17a5 5 0 0 1 10 0M12 8V5M5.5 11 4 9.5M18.5 11 20 9.5"/></svg>'],
+ ['النهار','عَمِلَ صَالِحًا','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg>'],
+ ['المسا','حَيَاةً طَيِّبَةً','<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 3a8 8 0 1 0 6 13A9 9 0 0 1 15 3Z"/></svg>']];
+const WORSHIP=[['pray','الصلاة أوّل الوقت','dots5'],['quran','ورد القرآن','pages'],['ahd','دعاء العهد','dot'],['salam','السلام على الإمام','dot'],['tasbih','تسبيح الزهراء','dot'],
+ ['istighfar','الاستغفار','dot'],['sadaqa','صدقة','dot'],['read','قراءة','pages'],['sport','رياضة','dot'],['layl','صلاة الليل','dot']];
+function worship(key){const e=Store.get(key);
+  return WORSHIP.map(([id,label,kind])=>{let c='';
+    if(kind==='dots5')c=`<span class="dots">${[0,1,2,3,4].map(i=>`<input type="checkbox" class="dot" id="f-${key}-${id}${i}" data-k="${key}" data-f="${id}${i}" ${e[id+i]?'checked':''} aria-label="صلاة ${ar(i+1)}">`).join('')}</span>`;
+    else if(kind==='dot')c=`<input type="checkbox" class="dot" id="f-${key}-${id}" data-k="${key}" data-f="${id}" ${e[id]?'checked':''} aria-label="${label}">`;
+    else c=`<span class="pg"><input type="number" min="0" inputmode="numeric" id="f-${key}-${id}" data-k="${key}" data-f="${id}" value="${esc(e[id]||'')}" aria-label="${label}، عدد الصفحات">صفحة</span>`;
+    return `<div class="w"><span>${label}</span>${c}</div>`;}).join('');}
+
+function vDay(d){const S=ST[d.st-1],M=MONTH(d.m),W=weekOf(d),e=Store.get(d.key),st=dayState(d.key);
+  const prev=DAYS[d.i-1],next=DAYS[d.i+1];
+  return `<div class="dayhead"><span class="n num">${ar(d.d)}</span><div><h2 style="font-size:22px">${esc(d.wd)}</h2><span class="muted small">${MONTHS[d.m-1]} ٢٠٢٧</span></div>
+    <div class="seed" id="dayseed" title="${SEEDWORD[st]}">${seed(S.id,st)}<span>${S.unit} اليوم</span></div></div>
+  <div class="meta"><span>المحطة ${S.ord} · <a href="#${M.key}">${esc(M.theme)}</a></span><span>الأسبوع: <a href="#${W.key}">${esc(W.title)}</a></span></div>
+  ${fld(d.key,'intent','نيّتي اليوم',{input:true})}
+  <div class="times">${TIMES.map((t,i)=>`<section class="time"><div class="tlabel"><span class="ico">${t[2]}</span><b>${t[0]}</b><span class="q-inline">${t[1]}</span></div>
+     <div class="tbody"><label class="check"><input type="checkbox" id="f-${d.key}-c${i}" data-k="${d.key}" data-f="c${i}" ${e['c'+i]?'checked':''}><span>${esc(d.q[i])}</span></label>
+     <textarea id="f-${d.key}-a${i}" data-k="${d.key}" data-f="a${i}" rows="3" aria-label="${esc(d.q[i])}">${esc(e['a'+i]||'')}</textarea>
+     ${i===2?fld(d.key,'best','أطيب ما في يومي',{rows:2,cls:'best'}):''}</div></section>`).join('')}</div>
+  <section class="worship"><h3 style="font-weight:700">عباداتي اليوم</h3><div class="wgrid">${worship(d.key)}</div></section>
+  <nav class="pager">${prev?`<a class="btn" href="#${prev.key}">→ ${ar(prev.d)} ${MONTHS[prev.m-1]}</a>`:'<span></span>'}
+    <a class="btn" href="#map${S.id}">${esc(S.mapName)}</a>
+    ${next?`<a class="btn" href="#${next.key}">${ar(next.d)} ${MONTHS[next.m-1]} ←</a>`:''}</nav>`;}
+
+function vReview(M){const S=ST[M.st-1],k='r'+M.n;const f=monthFilled(M),n=monthDays(M).length;
+  return `<div class="head"><span class="eyebrow">آخر ${M.name}</span><h1>ميزان الشهر</h1></div>
+  <div class="row">${seed(S.id,2).replace('<svg','<svg style="width:20px;height:26px"')}<span>امتلأت هذا الشهر <b class="num">${ar(f)}</b> ${S.unit} من ${ar(n)}</span></div>
+  <div class="box"><p style="font-size:16px">${esc(M.review.q)}</p></div>
+  ${fld(k,'a','جوابي',{rows:5})}
+  <div class="two">${fld(k,'kept','ما ثبتَ عندي',{rows:4})}${fld(k,'fix','ما أتداركه',{rows:4})}</div>
+  ${fld(k,'next',M.review.last,{rows:4})}
+  <div class="row"><a class="btn" href="#${M.key}">${M.name}</a>${MONTH(M.n+1)?`<a class="btn solid" href="#${MONTH(M.n+1).key}">${MONTH(M.n+1).name} ←</a>`:''}</div>`;}
+
+function vHarvest(S){const k='h'+S.id,f=stFilled(S),h=S.harvest;
+  return `<div class="head"><span class="eyebrow">آخر المحطة ${S.ord}</span><h1>${esc(S.harvestName)}</h1></div>
+  <div class="row">${seed(S.id,2).replace('<svg','<svg style="width:20px;height:26px"')}<span>امتلأت في المحطة <b class="num">${ar(f)}</b> ${S.unit} من ${ar(S.days.length)}</span></div>
+  ${h.prompts.map((p,i)=>fld(k,'a'+i,p,{rows:4})).join('')}
+  ${S.id===3?`<details class="box"><summary style="cursor:pointer;font-weight:500">عهود المحطات الثلاث</summary>${ST.map(x=>{const c=Store.get('c'+x.id);return `<div class="stack" style="margin-top:10px"><b style="color:var(--olive)">المحطة ${x.ord}</b>${x.covenant.prompts.map((p,i)=>`<p class="small"><span class="muted">${esc(p)}:</span> ${esc(c['a'+i]||'—')}</p>`).join('')}</div>`;}).join('')}</details>`:''}
+  ${h.next?`<a class="cover" href="#s${S.id+1}" style="text-decoration:none"><span class="eyebrow">${esc(h.next)}</span><div class="w" style="font-size:30px">${esc(h.nextWord)}</div><span class="small" style="color:var(--onbar-muted)">${esc(h.nextDate)}</span></a>`:`<p class="muted">${esc(h.note)}</p>${ayah(DATA.intro.tree)}`}`;}
+
+function vMap(S){
+  return `<div class="head"><span class="eyebrow num">${ar(S.days.length)} ${S.unit}</span><h1>${esc(S.mapName)}</h1><p class="small muted">كلّ ${S.unit} يوم. الخطّ الذهبي يفصل بين الأسابيع. اضغط على أيّ يوم لتفتح صفحته.</p></div>
+  <div class="row" style="gap:6px">${ST.map(x=>`<a class="btn ${x.id===S.id?'solid':''}" href="#map${x.id}">${esc(x.name)}</a>`).join('')}</div>
+  <div class="legend">${[0,1,2].map(s=>`<span>${seed(S.id,s)}${SEEDWORD[s]}</span>`).join('')}</div>
+  ${S.months.map(M=>{const days=monthDays(M);let html='';days.forEach((d,i)=>{if(i>0&&M.weeks.some(W=>W.from===d.d))html+='<span class="wk"></span>';
+     html+=`<a href="#${d.key}" aria-label="${d.d} ${M.name}">${seed(S.id,dayState(d.key))}<span class="num">${ar(d.d)}</span></a>`;});
+    return `<section class="mapmonth"><div class="mm-h"><b>${M.name}</b><span class="small muted">${esc(M.theme)} · <span class="num">${ar(monthFilled(M))}/${ar(days.length)}</span></span></div><div class="seeds">${html}</div></section>`;}).join('')}`;}
+
+function vBackup(){
+  return `<div class="head"><span class="eyebrow">حفظ ونسخ احتياطي</span><h1>كتابتك</h1><p class="status" id="status"></p></div>
+  <p>تُحفظ كلّ كلمة تكتبها تلقائياً. خذ نسخة احتياطية من وقت لآخر، واحتفظ بها في ملاحظاتك أو بريدك، لتنقل مفكرتك إلى جهاز آخر أو تستعيدها.</p>
+  <section class="stack"><h2>نسخة احتياطية</h2><div class="row"><button class="btn solid" id="b-copy" type="button">انسخ النسخة الاحتياطية</button><button class="btn" id="b-save" type="button" hidden>احفظها كملف</button></div>
+   <textarea id="b-out" rows="4" readonly aria-label="النسخة الاحتياطية" style="font-size:12px;direction:ltr;text-align:left"></textarea></section>
+  <section class="stack"><h2>استعادة</h2><p class="small muted">الصق نصّ النسخة الاحتياطية هنا أو اختر ملفّها، ثم اضغط «استعد».</p>
+   <textarea id="b-in" rows="4" aria-label="الصق النسخة الاحتياطية" style="font-size:12px;direction:ltr;text-align:left"></textarea>
+   <div class="row"><input type="file" id="b-file" accept=".json,application/json,text/plain"><button class="btn" id="b-restore" type="button">استعد</button></div>
+   <div id="b-confirm"></div></section>
+  <p class="small muted num">كتبتَ في ${ar(Object.keys(Store.cache).filter(k=>k.startsWith('d')).length)} يوماً حتى الآن.</p>`;}
+
+/* ---------- router ---------- */
+let current='';
+function route(){const h=(location.hash||'#home').slice(1);let html,nav='';
+  let m;
+  if(h==='today'){const tk=todayKey();location.replace('#'+(tk&&DAYMAP[tk]?tk:'d0101'));return;}
+  if(h==='map'){location.replace('#map'+(todayKey()&&DAYMAP[todayKey()]?DAYMAP[todayKey()].st:1));return;}
+  if((m=h.match(/^d(\d\d)(\d\d)$/))&&DAYMAP[h]){html=vDay(DAYMAP[h]);nav='today';}
+  else if((m=h.match(/^s([123])$/))){html=vStation(ST[m[1]-1]);nav='s';}
+  else if((m=h.match(/^map([123])$/))){html=vMap(ST[m[1]-1]);nav='map';}
+  else if((m=h.match(/^c([123])$/))){html=vCovenant(ST[m[1]-1]);nav='s';}
+  else if((m=h.match(/^k([123])$/))){html=vSpeech(ST[m[1]-1]);nav='s';}
+  else if((m=h.match(/^h([123])$/))){html=vHarvest(ST[m[1]-1]);nav='s';}
+  else if((m=h.match(/^m(\d{1,2})$/))&&MONTH(+m[1])){html=vMonth(MONTH(+m[1]));nav='s';}
+  else if((m=h.match(/^r(\d{1,2})$/))&&MONTH(+m[1])){html=vReview(MONTH(+m[1]));nav='s';}
+  else if((m=h.match(/^w(\d{1,2})-(\d)$/))&&MONTH(+m[1])){const W=MONTH(+m[1]).weeks[m[2]-1];if(W){html=vWeek(W);nav='s';}}
+  else if(h==='about'){html=vAbout();}
+  else if(h==='backup'){html=vBackup();nav='backup';}
+  if(!html){html=vHome();}
+  const view=document.getElementById('view');view.innerHTML=html;
+  document.querySelectorAll('#nav a').forEach(a=>a.setAttribute('aria-current',a.dataset.n===nav?'true':'false'));
+  if(h==='backup')initBackup();
+  setStatus();autosize();
+  if(current!==h)window.scrollTo(0,0);current=h;
+}
+function render(){const y=window.scrollY;const ae=document.activeElement&&document.activeElement.id;route();window.scrollTo(0,y);if(ae){const el=document.getElementById(ae);if(el)el.focus({preventScroll:true});}}
+
+/* ---------- input binding ---------- */
+function autosize(){document.querySelectorAll('textarea:not([readonly])').forEach(t=>{t.style.height='auto';t.style.height=Math.max(Math.ceil(t.scrollHeight/32)*32,64)+'px';});}
+document.addEventListener('input',e=>{const t=e.target;if(!t.dataset||!t.dataset.k)return;
+  const v=t.type==='checkbox'?t.checked:t.value;Store.set(t.dataset.k,t.dataset.f,v);
+  if(t.tagName==='TEXTAREA'){t.style.height='auto';t.style.height=Math.max(Math.ceil(t.scrollHeight/32)*32,64)+'px';}
+  if(t.type==='checkbox'&&/^c[012]$/.test(t.dataset.f)){const d=DAYMAP[t.dataset.k];const el=document.getElementById('dayseed');
+    if(d&&el){const s=dayState(d.key);el.innerHTML=seed(d.st,s)+`<span>${ST[d.st-1].unit} اليوم</span>`;el.title=SEEDWORD[s];if(s===2)toast(`امتلأت ${ST[d.st-1].unit} اليوم`);}}
+});
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2200);}
+
+/* ---------- backup ---------- */
+function initBackup(){
+  const out=document.getElementById('b-out');const dump=JSON.stringify({app:'hayat-tayyiba-2027',v:1,entries:Store.cache});out.value=dump;
+  document.getElementById('b-copy').onclick=async()=>{try{await navigator.clipboard.writeText(dump);toast('نُسخت النسخة الاحتياطية');}catch(e){out.focus();out.select();toast('حدّد النصّ وانسخه');}};
+  const sv=document.getElementById('b-save');
+  (async()=>{try{const dl=window.claude&&await window.claude.use('downloads');if(dl){sv.hidden=false;sv.onclick=async()=>{try{await dl.save({filename:'hayat-tayyiba-2027.json',data:dump});}catch(e){}};}}catch(e){}})();
+  const inp=document.getElementById('b-in');
+  document.getElementById('b-file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{inp.value=r.result;};r.readAsText(f);};
+  document.getElementById('b-restore').onclick=()=>{let obj;try{obj=JSON.parse(inp.value);}catch(e){toast('النصّ ليس نسخة احتياطية صالحة');return;}
+    const entries=obj&&obj.entries;if(!entries||typeof entries!=='object'){toast('لم أجد كتابة في هذه النسخة');return;}
+    const box=document.getElementById('b-confirm');
+    box.innerHTML=`<div class="confirm"><p>ستُدمج ${ar(Object.keys(entries).length)} صفحة من النسخة مع كتابتك الحالية. حين تختلف الصفحة نفسها تبقى الكتابة الأحدث.</p><div class="row"><button class="btn solid" id="b-yes" type="button">ادمج النسخة</button><button class="btn" id="b-no" type="button">إلغاء</button></div></div>`;
+    document.getElementById('b-no').onclick=()=>box.innerHTML='';
+    document.getElementById('b-yes').onclick=()=>{let n=0;Object.entries(entries).forEach(([k,v])=>{if(!v||typeof v!=='object')return;const l=Store.cache[k];if(!l||(v._t||0)>=(l._t||0)){Store.cache[k]=v;n++;if(Store.remote&&!Store.queue.includes(k))Store.queue.push(k);}});
+      Store.saveLocal();Store.drain();box.innerHTML='';toast(`استُعيدت ${ar(n)} صفحة`);render();};
+  };
+}
+
+Store.load();
+window.addEventListener('hashchange',route);
+route();
+Store.connect();
+})();
+</script>
